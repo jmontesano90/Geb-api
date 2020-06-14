@@ -10,14 +10,19 @@ outlinesRouter
   .all(checkOutlineExists)
   .get((req, res) => {
     res.json(OutlinesService.serializeOutline(res.outline));
-  })
+  });
 
-  outlinesRouter.route('/outline_id/grids')
-    .all(requireAuth)
-    .all(checkOutlineExists)
-    .get((req, res , next) =>{
-        OutlinesService.get
-    })
+outlinesRouter
+  .route('/outline_id/grids')
+  .all(requireAuth)
+  .all(checkOutlineExists)
+  .get((req, res, next) => {
+    OutlinesService.getGridsForOutline(req.app.get('db'), req.params.outline_id)
+      .then((grids) => {
+        res.json(grids.map(OutlinesService.serializeGrid));
+      })
+      .catch(next);
+  });
 
 async function checkOutlineExists(req, res, next) {
   try {

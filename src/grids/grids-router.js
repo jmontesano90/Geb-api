@@ -4,7 +4,7 @@ const GridsService = require('./grids-service');
 
 const gridsRouter = express.Router();
 
-gridsRouter.router('/').post((req, res, next) => {
+gridsRouter.route('/').post((req, res, next) => {
   const {
     grid_id,
     comment,

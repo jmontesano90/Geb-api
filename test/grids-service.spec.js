@@ -119,6 +119,7 @@ describe(`Grids service object`, function () {
         user_id: null,
         grid_id: null,
       };
+      console.log(newGrid);
       return GridsService.insertGrid(db, newGrid).then((actual) => {
         expect(actual).to.eql({
           id: 1,

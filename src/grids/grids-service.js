@@ -12,7 +12,8 @@ const GridsService = {
       .returning('*')
       .then(([grid]) => grid)
       .then((grid) => {
-        GridsService.getById(db, grid.id);
+        // GridsService.getById(db, grid.id);
+        return grid[0];
       });
   },
   getById(knex, id) {
