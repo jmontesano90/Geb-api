@@ -1,32 +1,35 @@
 const express = require('express');
-const OutlinesService = require('./outlines-service');
+const TemplatesService = require('./templates-service');
 const { requireAuth } = require('../middleware/basic-auth');
 
-const outlinesRouter = express.Router();
+const templatesRouter = express.Router();
 
-outlinesRouter
-  .route('/outline_id')
+templatesRouter
+  .route('/:outline_id')
   .all(requireAuth)
   .all(checkOutlineExists)
   .get((req, res) => {
-    res.json(OutlinesService.serializeOutline(res.outline));
+    res.json(TemplatesService.serializeOutline(res.outline));
   });
 
-outlinesRouter
-  .route('/outline_id/grids')
+templatesRouter
+  .route('/:outline_id/grids')
   .all(requireAuth)
   .all(checkOutlineExists)
   .get((req, res, next) => {
-    OutlinesService.getGridsForOutline(req.app.get('db'), req.params.outline_id)
+    TemplatesService.getGridsForOutline(
+      req.app.get('db'),
+      req.params.outline_id
+    )
       .then((grids) => {
-        res.json(grids.map(OutlinesService.serializeGrid));
+        res.json(grids.map(TemplatesService.serializeGrid));
       })
       .catch(next);
   });
 
 async function checkOutlineExists(req, res, next) {
   try {
-    const outline = await OutlinesService.getById(
+    const outline = await TemplatesService.getById(
       req.app.get('db'),
       req.params.outline_id
     );
@@ -42,3 +45,5 @@ async function checkOutlineExists(req, res, next) {
     next(error);
   }
 }
+
+module.exports = templatesRouter;

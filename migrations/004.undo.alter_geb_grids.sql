@@ -1,1 +1,1 @@
-DROP TYPE IF EXISTS grid_id;
+DROP TYPE IF EXISTS template_id;

@@ -1,31 +1,31 @@
 const xss = require('xss');
 
-const OutLineService = {
-  getAllOutlines(knex) {
-    return knex.select('*').from('geb_outlines');
+const Templateservice = {
+  getAllTemplates(knex) {
+    return knex.select('*').from('geb_templates');
   },
 
   insertOutline(knex, newOutline) {
     return knex
       .insert(newOutline)
-      .into('geb_outlines')
+      .into('geb_templates')
       .returning('*')
       .then(([outline]) => outline)
       .then((outline) => {
-        OutLineService.getById(db, outline.id);
+        Templateservice.getById(db, outline.id);
       });
   },
   getById(knex, id) {
-    return knex.from('geb_outlines').select('*').where('id', id).first();
+    return knex.from('geb_templates').select('*').where('id', id).first();
   },
   getByUserId(knex, userId) {
-    return knex.from('geb_outlines').select('*').where('user_id', userId);
+    return knex.from('geb_templates').select('*').where('user_id', userId);
   },
   getGridsForOutline(knex, outlineId) {
     return knex.from('geb_grids').select('*').where('grid_id', outlineId);
   },
   deleteOutline(knex, id) {
-    return knex('geb_outlines').where({ id }).delete();
+    return knex('geb_templates').where({ id }).delete();
   },
   serializeOutline(outline) {
     const { user } = outline;
@@ -90,4 +90,4 @@ const OutLineService = {
   },
 };
 
-module.exports = OutLineService;
+module.exports = Templateservice;

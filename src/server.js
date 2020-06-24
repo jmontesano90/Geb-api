@@ -8,7 +8,7 @@ const db = knex({
   connection: DB_URL,
 });
 
-console.log(GridsService.getAllGrids());
+//console.log(GridsService.getAllGrids());
 
 app.set('db', db);
 

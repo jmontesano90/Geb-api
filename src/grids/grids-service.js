@@ -1,4 +1,5 @@
 const xss = require('xss');
+const knex = require('knex');
 
 const GridsService = {
   getAllGrids(knex) {
@@ -20,7 +21,7 @@ const GridsService = {
     return knex.from('geb_grids').select('*').where('id', id).first();
   },
   getByGridId(knex, gridId) {
-    return knex.from('geb_grids').select('*').where('grid_id', gridId);
+    return knex.from('geb_grids').select('*').where('template_id', gridId);
   },
   deleteGrid(knex, id) {
     return knex('geb_grids').where({ id }).delete();
@@ -30,30 +31,22 @@ const GridsService = {
     return {
       id: grid.id,
       user_id: grid.user_id,
-      comment: xss(grid.comment),
       x: grid.x,
       y: grid.y,
-      transect_count: grid.transect_count,
-      minimum: grid.minimum,
-      partial_transect_count: grid.partial_transect_count,
       partial_transect_length: grid.partial_transect_length,
       x_partial: grid.x_partial,
       y_partial: grid.y_partial,
-      grid_id: grid.grid_id,
+      template_id: grid.template_id,
       date_created: new Date(grid.date_created),
       user: {
         id: user.id,
         user_id: user.user_id,
-        comment: xss(user.comment),
         x: user.x,
         y: user.y,
-        transect_count: user.transect_count,
-        minimum: user.minimum,
-        partial_transect_count: user.partial_transect_count,
         partial_transect_length: user.partial_transect_length,
         x_partial: user.x_partial,
         y_partial: user.y_partial,
-        grid_id: user.grid_id,
+        template_id: user.template_id,
         date_created: new Date(user.date_created),
       },
     };

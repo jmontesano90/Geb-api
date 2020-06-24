@@ -1,30 +1,23 @@
 const express = require('express');
 const path = require('path');
 const GridsService = require('./grids-service');
+const { requireAuth } = require('../middleware/basic-auth');
 
 const gridsRouter = express.Router();
 
-gridsRouter.route('/').post((req, res, next) => {
+gridsRouter.route('/').post((requireAuth, req, res, next) => {
   const {
     grid_id,
-    comment,
     x,
     y,
-    transect_count,
-    minimum,
-    partial_transect_count,
     partial_transect_length,
     x_partial,
     y_partial,
   } = req.body;
   const newGrid = {
     grid_id,
-    comment,
     x,
     y,
-    transect_count,
-    minimum,
-    partial_transect_count,
     partial_transect_length,
     x_partial,
     y_partial,

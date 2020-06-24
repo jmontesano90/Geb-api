@@ -5,7 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const gridsRouter = require('./grids/grids-router');
-const outlinesRouter = require('./outlines/outlines-router');
+const templatesRouter = require('./templates/templates-router');
 
 const app = express();
 
@@ -17,7 +17,10 @@ app.use(helmet());
 
 app.use('/api/grids', gridsRouter);
 //app.use('/api/users', usersRouter);
-app.use('/api/outlines', outlinesRouter);
+app.use('/api/templates', templatesRouter);
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
