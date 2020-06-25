@@ -101,13 +101,12 @@ describe(`Grids service object`, function () {
       };
       return GridsService.insertGrid(db, newGrid).then((actual) => {
         expect(actual).to.eql({
-          id: 3,
+          id: 1,
           template_id: newGrid.template_id,
           x: newGrid.x,
           y: newGrid.y,
           date_created: newGrid.date_created,
-          direction: newGrid.direction,
-          partial_transect_count: newGrid.partial_transect_count,
+          partial_transect_length: newGrid.partial_transect_length,
           x_partial: newGrid.x_partial,
           y_partial: newGrid.y_partial,
           user_id: newGrid.user_id,

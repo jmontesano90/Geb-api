@@ -5,14 +5,14 @@ const Templateservice = {
     return knex.select('*').from('geb_templates');
   },
 
-  insertOutline(knex, newOutline) {
+  insertTemplate(knex, newTemplate) {
     return knex
-      .insert(newOutline)
+      .insert(newTemplate)
       .into('geb_templates')
       .returning('*')
-      .then(([outline]) => outline)
-      .then((outline) => {
-        Templateservice.getById(db, outline.id);
+      .then(([template]) => template)
+      .then((template) => {
+        Templateservice.getById(knex, template.id);
       });
   },
   getById(knex, id) {
@@ -21,25 +21,25 @@ const Templateservice = {
   getByUserId(knex, userId) {
     return knex.from('geb_templates').select('*').where('user_id', userId);
   },
-  getGridsForOutline(knex, outlineId) {
-    return knex.from('geb_grids').select('*').where('grid_id', outlineId);
+  getGridsForTemplate(knex, templateId) {
+    return knex.from('geb_grids').select('*').where('grid_id', templateId);
   },
-  deleteOutline(knex, id) {
+  deleteTemplate(knex, id) {
     return knex('geb_templates').where({ id }).delete();
   },
-  serializeOutline(outline) {
-    const { user } = outline;
+  serializeTemplate(template) {
+    const { user } = template;
     return {
-      id: outline.id,
-      user_id: outline.user_id,
-      name: xss(outline.name),
-      x: outline.x,
-      y: outline.y,
-      transect_count: outline.transect_count,
-      minimum: outline.minimum,
-      partial_transect_count: outline.partial_transect_count,
-      partial_transect_length: outline.partial_transect_length,
-      date_created: new Date(outline.date_created),
+      id: template.id,
+      user_id: template.user_id,
+      name: xss(template.name),
+      x: template.x,
+      y: template.y,
+      transect_count: template.transect_count,
+      minimum: template.minimum,
+      partial_transect_count: template.partial_transect_count,
+      partial_transect_length: template.partial_transect_length,
+      date_created: new Date(template.date_created),
       user: {
         id: user.id,
         user_id: user.user_id,

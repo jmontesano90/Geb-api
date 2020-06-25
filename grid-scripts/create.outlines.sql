@@ -7,4 +7,4 @@ CREATE TABLE geb_templates(
     minimum INTEGER NOT NULL,
     partial_transect_count INTEGER NOT NULL,
     partial_transect_length INTEGER NOT NULL
-)
+);
