@@ -18,7 +18,7 @@ templatesRouter
 templatesRouter.route('/hello/pleasework').post((req, res, next) => {
   return res.status(609);
 });
-templatesRouter.route('/hello/hello2').post((requireAuth, req, res, next) => {
+templatesRouter.route('/').post((req, res, next) => {
   const {
     id,
     user_id,

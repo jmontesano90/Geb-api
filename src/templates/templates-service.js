@@ -26,6 +26,7 @@ const Templateservice = {
     return knex('geb_templates').where({ id }).delete();
   },
   serializeTemplate(template) {
+    console.log(template);
     const { user } = template;
     return {
       id: template.id,
@@ -37,17 +38,17 @@ const Templateservice = {
       partial_transect_count: template.partial_transect_count,
       partial_transect_length: template.partial_transect_length,
       date_created: new Date(template.date_created),
-      user: {
-        id: user.id,
-        user_id: user.user_id,
-        x: user.x,
-        y: user.y,
-        transect_count: user.transect_count,
-        minimum: user.minimum,
-        partial_transect_count: user.partial_transect_count,
-        partial_transect_length: user.partial_transect_length,
-        date_created: new Date(user.date_created),
-      },
+      // user: {
+      //   id: user.id,
+      //   user_id: user.user_id,
+      //   x: user.x,
+      //   y: user.y,
+      //   transect_count: user.transect_count,
+      //   minimum: user.minimum,
+      //   partial_transect_count: user.partial_transect_count,
+      //   partial_transect_length: user.partial_transect_length,
+      //   date_created: new Date(user.date_created),
+      // },
     };
   },
 
