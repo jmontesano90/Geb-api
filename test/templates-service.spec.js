@@ -99,16 +99,8 @@ describe(`templates service objects`, function () {
         partial_transect_length: 6,
       };
       return TemplatesService.insertTemplate(db, newTemplate).then((actual) => {
-        expect(actual).to.eql({
-          id: 1,
-          user_id: null,
-          date_created: newTemplate.date_created,
-          name: newTemplate.name,
-          transect_count: newTemplate.transect_count,
-          minimum: newTemplate.minimum,
-          partial_transect_count: newTemplate.partial_transect_count,
-          partial_transect_length: newTemplate.partial_transect_length,
-        });
+        newTemplate.id = 1;
+        expect(actual).to.eql(newTemplate);
       });
     });
   });

@@ -16,6 +16,9 @@ const GridsService = {
         return GridsService.getById(knex, grid.id);
       });
   },
+  getByUserId(knex, userId) {
+    return knex.from('geb_grids').select('*').where('user_id', userId);
+  },
   getById(knex, id) {
     return knex.from('geb_grids').select('*').where('id', id).first();
   },
@@ -32,22 +35,23 @@ const GridsService = {
       user_id: grid.user_id,
       x: grid.x,
       y: grid.y,
+      direction: grid.direction,
       partial_transect_length: grid.partial_transect_length,
       x_partial: grid.x_partial,
       y_partial: grid.y_partial,
       template_id: grid.template_id,
       date_created: new Date(grid.date_created),
-      user: {
-        id: user.id,
-        user_id: user.user_id,
-        x: user.x,
-        y: user.y,
-        partial_transect_length: user.partial_transect_length,
-        x_partial: user.x_partial,
-        y_partial: user.y_partial,
-        template_id: user.template_id,
-        date_created: new Date(user.date_created),
-      },
+      // user: {
+      //   id: user.id,
+      //   user_id: user.user_id,
+      //   x: user.x,
+      //   y: user.y,
+      //   partial_transect_length: user.partial_transect_length,
+      //   x_partial: user.x_partial,
+      //   y_partial: user.y_partial,
+      //   template_id: user.template_id,
+      //   date_created: new Date(user.date_created),
+      // },
     };
   },
 };
