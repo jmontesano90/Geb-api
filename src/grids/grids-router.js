@@ -26,7 +26,7 @@ gridsRouter
 
 gridsRouter
   .route('/')
-  .all(requireAuth)
+  //.all(requireAuth)
   .get((req, res) => {
     GridsService.getByUserId(req.app.get('db'), req.params.user_id)
       .then((grids) => {
@@ -35,22 +35,26 @@ gridsRouter
       .catch(next);
   });
 
-gridsRouter.route('/').post((requireAuth, req, res, next) => {
+gridsRouter.route('/').post((req, res, next) => {
   const {
     template_id,
+    user_id,
     x,
     y,
     partial_transect_length,
     x_partial,
     y_partial,
+    direction,
   } = req.body;
   const newGrid = {
     template_id,
+    user_id,
     x,
     y,
     partial_transect_length,
     x_partial,
     y_partial,
+    direction,
   };
 
   for (const [key, value] of Object.entries(newGrid))
@@ -59,14 +63,12 @@ gridsRouter.route('/').post((requireAuth, req, res, next) => {
         error: `Missing '${key}' in request body`,
       });
 
-  newGrid.user_id = req.user.id;
-
   GridsService.insertGrid(req.app.get('db'), newGrid)
     .then((grid) => {
       res
         .status(201)
         .location(path.posix.join(req.originalUrl, `/${grid.id}`))
-        .json(grid.map(GridsService.serializeGrid));
+        .json(GridsService.serializeGrid(grid));
     })
     .catch(next);
 });

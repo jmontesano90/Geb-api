@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const gridsRouter = require('./grids/grids-router');
 const templatesRouter = require('./templates/templates-router');
-
+const bodyParser = require('body-parser');
 const app = express();
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
@@ -14,6 +14,7 @@ const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
+app.use(bodyParser.json());
 
 app.use('/api/grids', gridsRouter);
 //app.use('/api/users', usersRouter);

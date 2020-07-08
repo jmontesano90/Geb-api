@@ -19,8 +19,8 @@ templatesRouter.route('/hello/pleasework').post((req, res, next) => {
   return res.status(609);
 });
 templatesRouter.route('/').post((req, res, next) => {
+  console.log('body', req.body);
   const {
-    id,
     user_id,
     name,
     x,
@@ -29,10 +29,8 @@ templatesRouter.route('/').post((req, res, next) => {
     minimum,
     partial_transect_count,
     partial_transect_length,
-    date_created,
   } = req.body;
   const newTemplate = {
-    id,
     user_id,
     name,
     x,
@@ -41,20 +39,19 @@ templatesRouter.route('/').post((req, res, next) => {
     minimum,
     partial_transect_count,
     partial_transect_length,
-    date_created,
   };
   for (const [key, value] of Object.entries(newTemplate))
     if (value == null)
       return res.status(400).json({
         error: `Missing '${key}' in request body`,
       });
-  newTemplate.user_id = req.params.user_id;
+  //newTemplate.user_id = req.params.user_id;
   TemplatesService.insertTemplate(req.app.get('db'), newTemplate)
     .then((template) => {
       res
         .status(201)
         //.location(path.posix.join(req.originalUrl, `/${template.id}`))
-        .json(template.map(TemplatesService.serializeTemplate));
+        .json(TemplatesService.serializeTemplate(template));
     })
     .catch(next);
 });

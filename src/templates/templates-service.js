@@ -30,6 +30,7 @@ const Templateservice = {
     const { user } = template;
     return {
       id: template.id,
+      name: template.name,
       user_id: template.user_id,
       x: template.x,
       y: template.y,
