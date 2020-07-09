@@ -46,7 +46,8 @@ usersRouter.post('/users', jsonBodyParser, (req, res, next) => {
         return UsersService.insertUser(req.app.get('db'), newUser).then(
           (user) => {
             console.log(user);
-            res.status(201).json(UsersService.serializeUser(user));
+            res.status(201);
+            //.json(UsersService.serializeUser(user));
           }
         );
       });
@@ -94,15 +95,11 @@ usersRouter
   .route('/:user_name')
   //.all(requireAuth)
   .get((req, res) => {
-    UsersService.getUserId(req.app.get('db'), req.params.user_name)
-      .then(console.log(req.params.user_name))
-      .then(
-        console.log(
-          UsersService.getUserId(req.app.get('db'), req.params.user_name)
-        )
-      )
-      .then(res.json(UsersService.serializeUser))
-      .catch(console.log('Didnt send info'));
+    UsersService.getUserId(
+      req.app.get('db'),
+      req.params.user_name
+    ).then((user) => res.json(UsersService.serializeUser(user)));
+    //.catch(console.log('Didnt send info'));
   });
 
 usersRouter

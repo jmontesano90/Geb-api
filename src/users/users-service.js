@@ -15,25 +15,19 @@ const UsersService = {
       .then((user) => !!user);
   },
 
-  insertUser(knex, newUser) {
-    return knex
+  insertUser(db, newUser) {
+    return db
       .insert(newUser)
       .into('geb_users')
       .returning('*')
-      .then((user) => {
-        user;
-      });
+      .then(([user]) => user);
   },
 
   getById(knex, id) {
     return knex.from('geb_users').select('*').where('id', id).first();
   },
   getUserId(knex, userName) {
-    return knex
-      .from('geb_users')
-      .select('id')
-      .where('user_name', userName)
-      .first();
+    return knex('geb_users').select('id').where('user_name', userName).first();
   },
   deleteUser(knex, id) {
     return knex('geb_users').where({ id }).delete();
