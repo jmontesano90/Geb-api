@@ -7,6 +7,7 @@ const { NODE_ENV } = require('./config');
 const gridsRouter = require('./grids/grids-router');
 const templatesRouter = require('./templates/templates-router');
 const bodyParser = require('body-parser');
+const usersRouter = require('./users/users-router');
 const app = express();
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use('/api/grids', gridsRouter);
 //app.use('/api/users', usersRouter);
 app.use('/api/templates', templatesRouter);
+app.use('/api/auth/', usersRouter);
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });

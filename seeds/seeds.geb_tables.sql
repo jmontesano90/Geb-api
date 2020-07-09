@@ -7,8 +7,8 @@ TRUNCATE
 
 INSERT INTO geb_users (user_name, full_name, password)
 VALUES
-('joe', 'Joseph Montesano', 'janjm2020'),
-('John', 'John Montesano','johnsucks' );
+('joe', 'Joseph Montesano', '$2a$12$BhInUs.pd/7g7DKLBcRBx.09aw1hHD5tWcRrgi1sYueQS4px0/RvO'),
+('John', 'John Montesano','$2a$12$TIveU0GIuw064szN3zE6wuNO5g6QRP01ovMpK/y.x3H0Eow8sEGia' );
 
 INSERT INTO geb_templates (user_id, name, transect_count, minimum, partial_transect_length, partial_transect_count, x, y)
 VALUES

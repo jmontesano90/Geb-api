@@ -2,8 +2,10 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const UsersService = require('./users-service');
+const AuthService = require('../auth/auth-service');
 
 const usersRouter = express.Router();
+const jsonBodyParser = express.json();
 const jsonParser = express.json();
 
 const serializeUser = (user) => ({
@@ -13,38 +15,94 @@ const serializeUser = (user) => ({
   date_created: user.date_created,
 });
 
-usersRouter
-  .route('/')
-  .get((req, res, next) => {
-    const knexInstance = req.app.get('db');
-    UsersService.getAllUsers(knexInstance)
-      .then((users) => {
-        res.json(users.map(serializeUser));
-      })
-      .catch(next);
-  })
-  .post(jsonParser, (req, res, next) => {
-    const { full_name, user_name, password } = req.body;
-    const newUser = { full_name, user_name };
+usersRouter.post('/users', jsonBodyParser, (req, res, next) => {
+  const { password, user_name, full_name } = req.body;
 
-    for (const [key, value] of Object.entries(newUser)) {
-      if (value == null) {
+  for (const field of ['full_name', 'user_name', 'password'])
+    if (!req.body[field])
+      return res.status(400).json({
+        error: `Missing '${field}' in request body`,
+      });
+
+  // TODO: check user_name doesn't start with spaces
+
+  const passwordError = UsersService.validatePassword(password);
+
+  if (passwordError) return res.status(400).json({ error: passwordError });
+
+  UsersService.hasUserWithUserName(req.app.get('db'), user_name)
+    .then((hasUserWithUserName) => {
+      if (hasUserWithUserName)
+        return res.status(400).json({ error: `Username already taken` });
+
+      return UsersService.hashPassword(password).then((hashedPassword) => {
+        const newUser = {
+          user_name,
+          password: hashedPassword,
+          full_name,
+          date_created: 'now()',
+        };
+        console.log('New User: ' + newUser.user_name);
+        return UsersService.insertUser(req.app.get('db'), newUser).then(
+          (user) => {
+            console.log(user);
+            res.status(201).json(UsersService.serializeUser(user));
+          }
+        );
+      });
+    })
+    .catch(next);
+});
+
+usersRouter.post('/login', jsonBodyParser, (req, res, next) => {
+  const { user_name, password } = req.body;
+  const loginUser = { user_name, password };
+
+  for (const [key, value] of Object.entries(loginUser))
+    if (value == null)
+      return res.status(400).json({
+        error: `Missing '${key}' in request body`,
+      });
+
+  AuthService.getUserWithUserName(req.app.get('db'), loginUser.user_name)
+    .then((dbUser) => {
+      if (!dbUser)
         return res.status(400).json({
-          error: { message: `Missing '${key}' in request body` },
+          error: 'Incorrect user_name or password',
         });
-      }
-    }
 
-    newUser.password = password;
+      return AuthService.comparePasswords(
+        loginUser.password,
+        dbUser.password
+      ).then((compareMatch) => {
+        if (!compareMatch)
+          return res.status(400).json({
+            error: 'Incorrect user_name or password',
+          });
 
-    UsersService.insertUser(req.app.get('db'), newUser)
-      .then((user) => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${user.id}`))
-          .json(serializeUser(user));
-      })
-      .catch(next);
+        const sub = dbUser.user_name;
+        const payload = { user_id: dbUser.id };
+        res.send({
+          authToken: AuthService.createJwt(sub, payload),
+        });
+      });
+    })
+    .catch(next);
+});
+
+usersRouter
+  .route('/:user_name')
+  //.all(requireAuth)
+  .get((req, res) => {
+    UsersService.getUserId(req.app.get('db'), req.params.user_name)
+      .then(console.log(req.params.user_name))
+      .then(
+        console.log(
+          UsersService.getUserId(req.app.get('db'), req.params.user_name)
+        )
+      )
+      .then(res.json(UsersService.serializeUser))
+      .catch(console.log('Didnt send info'));
   });
 
 usersRouter

@@ -2,7 +2,6 @@ const xss = require('xss');
 
 const Templateservice = {
   getAllTemplates(knex) {
-    console.log('HELLO');
     return knex.select('*').from('geb_templates');
   },
 
@@ -19,14 +18,17 @@ const Templateservice = {
   getByUserId(knex, userId) {
     return knex.from('geb_templates').select('*').where('user_id', userId);
   },
+
   getGridsForTemplate(knex, templateId) {
     return knex.from('geb_grids').select('*').where('template_id', templateId);
   },
   deleteTemplate(knex, id) {
     return knex('geb_templates').where({ id }).delete();
   },
+  deleteTemplateGrids(knex, templateId) {
+    return knex('geb_grids').where('template_id', templateId).delete();
+  },
   serializeTemplate(template) {
-    console.log(template);
     const { user } = template;
     return {
       id: template.id,
