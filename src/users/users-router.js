@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const UsersService = require('./users-service');
@@ -23,8 +22,6 @@ usersRouter.post('/users', jsonBodyParser, (req, res, next) => {
       return res.status(400).json({
         error: `Missing '${field}' in request body`,
       });
-
-  // TODO: check user_name doesn't start with spaces
 
   const passwordError = UsersService.validatePassword(password);
 
@@ -90,28 +87,14 @@ usersRouter.post('/login', jsonBodyParser, (req, res, next) => {
     .catch(next);
 });
 
-usersRouter
-  .route('/:user_name')
-  //.all(requireAuth)
-
-  .get((req, res, next) => {
-    UsersService.getUserId(req.app.get('db'), req.params.user_name)
-      .then((user) => console.log(user))
-      //.then((user) => res.json(UsersService.serializeUser(user)))
-      .then((user) => {
-        res.json(user);
-      })
-      .catch((err) => next(err));
-  });
-// .route('/:user_name')
-// // .all(requireAuth)
-// .get((req, res, next) => {
-//   UsersService.getUserId(req.app.get('db'), req.params.user_name)
-//     .then((user) => {
-//       res.json(UsersService.serializeUser(user));
-//     })
-//     .catch(next);
-// });
+usersRouter.route('/:user_name').get((req, res, next) => {
+  UsersService.getUserId(req.app.get('db'), req.params.user_name)
+    .then((user) => console.log(user))
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => next(err));
+});
 
 usersRouter
   .route('/:user_id')

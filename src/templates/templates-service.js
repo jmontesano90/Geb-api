@@ -41,17 +41,6 @@ const Templateservice = {
       partial_transect_count: template.partial_transect_count,
       partial_transect_length: template.partial_transect_length,
       date_created: new Date(template.date_created),
-      // user: {
-      //   id: user.id,
-      //   user_id: user.user_id,
-      //   x: user.x,
-      //   y: user.y,
-      //   transect_count: user.transect_count,
-      //   minimum: user.minimum,
-      //   partial_transect_count: user.partial_transect_count,
-      //   partial_transect_length: user.partial_transect_length,
-      //   date_created: new Date(user.date_created),
-      // },
     };
   },
 
@@ -72,21 +61,6 @@ const Templateservice = {
       y_partial: grid.y_partial,
       grid_id: grid.grid_id,
       date_created: new Date(grid.date_created),
-      // user: {
-      //   id: user.id,
-      //   user_id: user.user_id,
-      //   comment: xss(user.comment),
-      //   x: user.x,
-      //   y: user.y,
-      //   transect_count: user.transect_count,
-      //   minimum: user.minimum,
-      //   partial_transect_count: user.partial_transect_count,
-      //   partial_transect_length: user.partial_transect_length,
-      //   x_partial: user.x_partial,
-      //   y_partial: user.y_partial,
-      //   grid_id: user.grid_id,
-      //   date_created: new Date(user.date_created),
-      // },
     };
   },
 };

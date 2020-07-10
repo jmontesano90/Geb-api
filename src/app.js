@@ -18,7 +18,6 @@ app.use(helmet());
 app.use(bodyParser.json());
 
 app.use('/api/grids', gridsRouter);
-//app.use('/api/users', usersRouter);
 app.use('/api/templates', templatesRouter);
 app.use('/api/auth/', usersRouter);
 app.get('/', (req, res) => {

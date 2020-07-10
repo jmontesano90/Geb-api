@@ -1,20 +1,16 @@
 const express = require('express');
 const TemplatesService = require('./templates-service');
-const { requireAuth } = require('../middleware/basic-auth');
 
 const templatesRouter = express.Router();
 
-templatesRouter
-  .route('/:user_id')
-  //.all(requireAuth)
-  .get((req, res) => {
-    TemplatesService.getByUserId(req.app.get('db'), req.params.user_id)
-      .then((templates) => {
-        console.log('Ran inside the .then');
-        res.json(templates.map(TemplatesService.serializeTemplate));
-      })
-      .catch(console.log('Templates user error'));
-  });
+templatesRouter.route('/:user_id').get((req, res) => {
+  TemplatesService.getByUserId(req.app.get('db'), req.params.user_id)
+    .then((templates) => {
+      console.log('Ran inside the .then');
+      res.json(templates.map(TemplatesService.serializeTemplate));
+    })
+    .catch(console.log('Templates user error'));
+});
 templatesRouter.route('/hello/pleasework').post((req, res, next) => {
   return res.status(609);
 });
@@ -44,12 +40,12 @@ templatesRouter.route('/').post((req, res, next) => {
       return res.status(400).json({
         error: `Missing '${key}' in request body`,
       });
-  //newTemplate.user_id = req.params.user_id;
+
   TemplatesService.insertTemplate(req.app.get('db'), newTemplate)
     .then((template) => {
       res
         .status(201)
-        //.location(path.posix.join(req.originalUrl, `/${template.id}`))
+
         .json(TemplatesService.serializeTemplate(template));
     })
     .catch(next);
@@ -57,7 +53,6 @@ templatesRouter.route('/').post((req, res, next) => {
 
 templatesRouter
   .route('/:user_id/:template_id')
-  //.all(requireAuth)
   .all(checkTemplateExists)
   .get((req, res) => {
     res.json(TemplatesService.serializeTemplate(res.template));
@@ -84,7 +79,6 @@ templatesRouter
 
 templatesRouter
   .route('/:user_id/:template_id/grids')
-  // .all(requireAuth)
   .all(checkTemplateExists)
   .get((req, res, next) => {
     TemplatesService.getGridsForTemplate(
