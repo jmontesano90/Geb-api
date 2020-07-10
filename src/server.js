@@ -5,7 +5,7 @@ const GridsService = require('./grids/grids-service');
 
 const db = knex({
   client: 'pg',
-  connection: DB_URL,
+  connection: DATABASE_URL,
 });
 
 //console.log(GridsService.getAllGrids());
