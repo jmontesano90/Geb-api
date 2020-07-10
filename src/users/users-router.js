@@ -46,8 +46,7 @@ usersRouter.post('/users', jsonBodyParser, (req, res, next) => {
         return UsersService.insertUser(req.app.get('db'), newUser).then(
           (user) => {
             console.log(user);
-            res.status(201);
-            //.json(UsersService.serializeUser(user));
+            res.status(201).json(UsersService.serializeUser(user));
           }
         );
       });
@@ -94,13 +93,25 @@ usersRouter.post('/login', jsonBodyParser, (req, res, next) => {
 usersRouter
   .route('/:user_name')
   //.all(requireAuth)
-  .get((req, res) => {
-    UsersService.getUserId(
-      req.app.get('db'),
-      req.params.user_name
-    ).then((user) => res.json(UsersService.serializeUser(user)));
-    //.catch(console.log('Didnt send info'));
+
+  .get((req, res, next) => {
+    UsersService.getUserId(req.app.get('db'), req.params.user_name)
+      .then((user) => console.log(user))
+      //.then((user) => res.json(UsersService.serializeUser(user)))
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => next(err));
   });
+// .route('/:user_name')
+// // .all(requireAuth)
+// .get((req, res, next) => {
+//   UsersService.getUserId(req.app.get('db'), req.params.user_name)
+//     .then((user) => {
+//       res.json(UsersService.serializeUser(user));
+//     })
+//     .catch(next);
+// });
 
 usersRouter
   .route('/:user_id')
