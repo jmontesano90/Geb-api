@@ -8,13 +8,14 @@ const gridsRouter = require('./grids/grids-router');
 const templatesRouter = require('./templates/templates-router');
 const bodyParser = require('body-parser');
 const usersRouter = require('./users/users-router');
+
 const app = express();
+app.use(cors());
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
-
-app.use(cors());
 app.use(morgan(morganOption));
 app.use(helmet());
+
 app.use(bodyParser.json());
 
 app.use('/api/grids', gridsRouter);
