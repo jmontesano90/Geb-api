@@ -89,7 +89,6 @@ usersRouter.post('/login', jsonBodyParser, (req, res, next) => {
 
 usersRouter.route('/:user_name').get((req, res, next) => {
   UsersService.getUserId(req.app.get('db'), req.params.user_name)
-    .then((user) => console.log(user))
     .then((user) => {
       res.json(user);
     })
