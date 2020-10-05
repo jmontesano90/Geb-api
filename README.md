@@ -1,26 +1,53 @@
-# Express Boilerplate!
+Geb
 
-This is a boilerplate project used for starting new projects!
+Live app: https://geb.jmontesano90.vercel.app/
 
-## Set up
+Thank you for using Geb!
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+Geb is a transect generator aimed at ecologists, biologists, entomologists or anyone that uses transect based sampling! Use Geb to specify template dimensions, then allow it to tell you where to sample using complete random transect generation. Geb will remember when you sampled and where you sampled in case you need it for your records.
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+https://imgur.com/fmdYdLn
+https://imgur.com/3xagKHu
+https://imgur.com/OK6Aw1r
 
-## Scripts
+Uses React, CSS, Node, Express, and PostgreSQL.
 
-Start the application `npm start`
+API Endpoints
 
-Start nodemon for the application `npm run dev`
+Authentication Route:
+${config.API_ENDPOINT}/auth/${userName}
+Returns user id. Supports Get requests
 
-Run the tests `npm test`
+    ${config.API_ENDPOINT}/auth/login
+    Logs user in, requires user_name and password.  Supports Post requests
 
-## Deploying
+    ${config.API_ENDPOINT}/auth/users
+    Posts a new user, requires user_name and password.  Supports Post requests
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+Grid Route:
+${config.API_ENDPOINT}/grids/user/${userId}
+Returns all user grids. Supports Get requests
+
+\${config.API_ENDPOINT}/grids
+Posts new grid. Supports Post requests. Requires the following: template_id, user_id, x, y, partial_transect_length, x_partial, y_partial, direction
+
+${config.API_ENDPOINT}/grids/user/${userId}
+Returns a specific grid. Supports Get requests
+Template Route:
+${config.API_ENDPOINT}/templates/${templateId}
+Returns a specific template. Supports Get requests
+
+${config.API_ENDPOINT}/templates/${userId}
+Returns all user templates. Supports Get requests
+
+${config.API_ENDPOINT}/templates/grids/${templateId}
+Deletes all grids associated with a template. Supports Delete requests
+
+${config.API_ENDPOINT}/templates/template${templateId}
+Deletes a template. Supports Delete requests
+
+${config.API_ENDPOINT}/templates/${templateId}/grids
+Returns all grids with associated with a template. Supports Get requests
+
+\${config.API_ENDPOINT}/templates/
+Posts a new template. Supports Post requests. Requires the following: minimum, name, partial_transect_count, partial_transect_length, transect_count, user_id, x, y.
